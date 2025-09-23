@@ -20,7 +20,7 @@ uvicorn==0.18.3
 watchfiles==0.17.0
 websockets==10.3
 wincertstore==0.2
-xgboost==1.6.2
+# xgboost==1.6.2  #uncomment if needed(for notebooks)
 neuro-mf==0.0.5
 boto3==1.26.105
 fastapi
