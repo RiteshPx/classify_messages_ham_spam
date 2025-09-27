@@ -70,6 +70,47 @@
         a:hover {
             background: #6a11cb;
         }
+        
+.workflow {
+    max-width: 1200px;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.workflow h2 {
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.workflow-images {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.workflow figure {
+    text-align: center;
+    max-width: 280px;
+}
+
+.workflow img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+}
+
+.workflow img:hover {
+    transform: scale(1.05);
+}
+
+.workflow figcaption {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #fff;
+}
+
     </style>
 </head>
 <body>
@@ -88,5 +129,26 @@
         </div>
         <a href="/">Check Another Message</a>
     </div>
+    <div class="workflow">
+    <h2>📊 Workflow: How It Works</h2>
+    <div class="workflow-images">
+
+        <figure>
+            <img src="static\images\Gemini_Generated_Image_2nq3oj2nq3oj2nq3.png" alt="Step 1: Data Preprocessing">
+            <figcaption> Data Preprocessing</figcaption>
+        </figure>
+
+        <figure>
+            <img src="static/images/training pipeline.png" alt="Step 2: Training Pipeline">
+            <figcaption> Training Pipeline</figcaption>
+        </figure>
+
+        <figure>
+            <img src="static/images/prediction pipeline.png" alt="Step 3: Prediction Pipeline">
+            <figcaption> Prediction Pipeline</figcaption>
+        </figure>
+
+    </div>
+</div>
 </body>
 </html>
