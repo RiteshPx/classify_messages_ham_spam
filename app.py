@@ -11,6 +11,9 @@ app = Flask(__name__)
 # Load model and vectorizer
 model = pickle.load(open('notebooks/model.pkl', 'rb'))
 vectorizer = pickle.load(open('notebooks/vectorizer.pkl', 'rb'))
+import nltk
+nltk.download('stopwords')
+nltk.download('wordnet')
 
 
 @app.route('/')
