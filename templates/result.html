@@ -3,152 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spam/Ham Result</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Prediction Result</title>
+    <!-- Using Inter font for consistency -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --color-primary: #3b82f6; /* Blue 500 */
+            --color-secondary: #8b5cf6; /* Violet 500 */
+            --color-background-dark: #1f2937; /* Gray 800 */
+            --color-text-light: #f3f4f6; /* Gray 100 */
+        }
+
         body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(to right, #6a11cb, #02122e);
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--color-background-dark), #000000);
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            justify-content: flex-start;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            color: #333;
+            padding: 40px 20px;
+            box-sizing: border-box;
         }
 
         .container {
-            background: #fff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-            max-width: 600px;
-            width: 100%;
+            background: var(--color-text-light);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            max-width: 600px; 
+            width: 95%;
             text-align: center;
+            transition: all 0.3s ease;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
         }
 
         h1 {
-            margin-bottom: 20px;
-            color: #2575fc;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: var(--color-primary);
+            font-weight: 800;
         }
 
+        .result-box {
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-text-light);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.5s ease;
+            /* FIX: Add overflow hidden to prevent background color bleed over rounded corners */
+            overflow: hidden; 
+        }
+
+        /* Using model output mapping (0 or 1) to apply colors */
+        .result-box.spam {
+            background-color: #ef4444; /* Red 500 for Spam */
+        }
+
+        .result-box.ham {
+            background-color: #10b981; /* Emerald 500 for Ham */
+        }
+        
         .message-box {
-            background: #f5f5f5;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 16px;
-            word-wrap: break-word;
-        }
-
-        .result {
-            font-size: 24px;
-            font-weight: bold;
+            background: #f3f4f6; /* Gray 100 */
+            border: 1px solid #e5e7eb;
             padding: 15px;
             border-radius: 8px;
-            color: rgb(221, 26, 143);
+            text-align: left;
             margin-bottom: 20px;
+            font-size: 0.9rem;
+            white-space: pre-wrap; /* Handles high volume text gracefully */
+            max-height: 200px;
+            overflow-y: auto; /* Scroll for large messages */
         }
-
-        .spam {
-            background-color: #e74c3c; /* Red for spam */
-        }
-
-        .ham {
-            background-color: #2ecc71; /* Green for ham */
+        
+        .message-box strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #4b5563; /* Gray 600 */
         }
 
         a {
+            background: var(--color-primary);
+            color: var(--color-text-light);
             text-decoration: none;
-            color: #fff;
-            background: #2575fc;
-            padding: 12px 25px;
-            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 9999px; /* Pill shape */
             transition: all 0.3s ease;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
         }
 
         a:hover {
-            background: #6a11cb;
+            background: var(--color-secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Workflow Section Styles (Synchronized from index.html) */
+        .workflow {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+            padding-bottom: 40px;
+        }
+
+        .workflow h2 {
+            color: var(--color-text-light);
+            margin-bottom: 30px;
+            font-size: 1.6rem;
+            font-weight: 800;
+        }
+
+        .workflow-images {
+            display: flex;
+            flex-wrap: wrap; 
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .workflow figure {
+            text-align: center;
+            background: var(--color-text-light);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            flex: 1 1 280px; 
+            max-width: 300px; 
+        }
+
+        .workflow img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .workflow img:hover {
+            transform: scale(1.02);
+        }
+
+        .workflow figcaption {
+            margin-top: 10px;
+            font-size: 1rem;
+            color: #333;
+            font-weight: 600;
         }
         
-.workflow {
-    max-width: 1200px;
-    text-align: center;
-    margin-top: 40px;
-}
-
-.workflow h2 {
-    color: #fff;
-    margin-bottom: 20px;
-}
-
-.workflow-images {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-}
-
-.workflow figure {
-    text-align: center;
-    max-width: 280px;
-}
-
-.workflow img {
-    width: 100%;
-    border-radius: 8px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-    transition: transform 0.3s ease;
-}
-
-.workflow img:hover {
-    transform: scale(1.05);
-}
-
-.workflow figcaption {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #fff;
-}
-
+        @media (max-width: 768px) {
+            .workflow-images {
+                flex-direction: column;
+                align-items: center;
+            }
+            .workflow figure {
+                max-width: 90%; 
+                flex-basis: auto;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Prediction Result</h1>
+        
+        <!-- Assuming Flask prediction is a string ('SPAM' or 'HAM') or an integer (0 or 1) -->
+        <!-- We use the lower filter to safely apply the CSS class -->
+        {% if prediction == 'SPAM' or prediction == 1 %}
+            <div class="result-box spam">
+                ⚠️ SPAM DETECTED
+            </div>
+        {% elif prediction == 'HAM' or prediction == 0 %}
+            <div class="result-box ham">
+                ✅ HAM (Safe Message)
+            </div>
+        {% else %}
+            <div class="result-box ham">
+                Prediction: {{ prediction }} 
+            </div>
+        {% endif %}
+
         <div class="message-box">
-            <strong>Message:</strong><br>
+            <strong>Original Message:</strong>
             {{ message }}
         </div>
-        <div class="result {{ prediction | lower }}">
-            {% if prediction == 0 %}
-                Ham
-            {% else %}
-                Spam
-            {% endif %}
-        </div>
-        <a href="/">Check Another Message</a>
+        
+        <a href="/">Test Another Message</a>
     </div>
+
+    <!-- Workflow Section (Synchronized with index.html) -->
     <div class="workflow">
-    <h2>📊 Workflow: How It Works</h2>
-    <div class="workflow-images">
+        <h2>🔬 Model Workflow & Pipeline</h2>
+        <div class="workflow-images">
 
-        <figure>
-            <img src="static\images\Gemini_Generated_Image_2nq3oj2nq3oj2nq3.png" alt="Step 1: Data Preprocessing">
-            <figcaption> Data Preprocessing</figcaption>
-        </figure>
+            <figure>
+                <!-- FIX: Use Flask's url_for for static files -->
+                <img src="\static\images\Gemini_Generated_Image_2nq3oj2nq3oj2nq3.png" 
+                     alt="Step 1: How it work">
+                <figcaption>1. How it works</figcaption>
+            </figure>
 
-        <figure>
-            <img src="static/images/training pipeline.png" alt="Step 2: Training Pipeline">
-            <figcaption> Training Pipeline</figcaption>
-        </figure>
+             <figure>
+                <!-- FIX: Use Flask's url_for for static files -->
+                <img src="\static\images\training pipeline.png" 
+                     alt="Step 3: Vectorization and Final Prediction">
+                <figcaption>2. Training Pipeline</figcaption>
+            </figure>
 
-        <figure>
-            <img src="static/images/prediction pipeline.png" alt="Step 3: Prediction Pipeline">
-            <figcaption> Prediction Pipeline</figcaption>
-        </figure>
+            <figure>
+                <!-- FIX: Use Flask's url_for for static files -->
+                <img src='\static\images\prediction pipeline.png'
+                     alt="Step 2: Model Training with TF-IDF and SVC">
+                <figcaption>3. Prediction Pipeline</figcaption>
+            </figure>
 
+        </div>
     </div>
-</div>
 </body>
 </html>

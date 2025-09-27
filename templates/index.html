@@ -1,220 +1,217 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spam/Ham Classifier</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(to right, #6a11cb, #00050e);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            color: #333;
-        }
-
-        .container {
-            background: #fff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-        }
-
-        h1 {
-            margin-bottom: 20px;
-            color: #2575fc;
-        }
-
-        textarea {
-            width: 100%;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            resize: vertical;
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-
-        button {
-            background: #2575fc;
-            color: white;
-            border: none;
-            padding: 15px 25px;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        button:hover {
-            background: #6a11cb;
-        }
-
-        p {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #666;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Spam/Ham Classifier</h1>
-        <form action="/predict" method="POST">
-            <textarea name="message" rows="6" placeholder="Type or paste your message here..." required></textarea>
-            <button type="submit">Check Message</button>
-        </form>
-        <p>Enter a message above to check if it's Spam or Ham.</p>
-    </div>
-</body>
-</html> -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spam/Ham Classifier</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Using Inter font for a modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --color-primary: #3b82f6; /* Blue 500 */
+            --color-secondary: #8b5cf6; /* Violet 500 */
+            --color-background-dark: #1f2937; /* Gray 800 */
+            --color-text-light: #f3f4f6; /* Gray 100 */
+        }
+
         body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(to right, #520d9c, #057490);
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--color-background-dark), #000000);
             display: flex;
-            flex-direction: column;
+            flex-direction: column; /* Allows content to stack vertically */
+            justify-content: flex-start; /* Aligns content to the top (more common for scrolling pages) */
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 20px;
+            padding: 40px 20px; /* Increased top/bottom padding */
             color: #333;
+            box-sizing: border-box; 
         }
 
         .container {
-            background: #fff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-            max-width: 500px;
-            width: 100%;
+            background: var(--color-text-light);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            max-width: 550px; 
+            width: 95%; 
             text-align: center;
-            margin-bottom: 40px;
+            transition: all 0.3s ease;
+            margin-bottom: 40px; /* Space before the workflow section */
+        }
+        
+        /* Mobile-specific adjustments for the container */
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 10px;
+            }
+            .container {
+                padding: 20px;
+            }
         }
 
         h1 {
-            margin-bottom: 20px;
-            color: #2575fc;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: var(--color-primary);
+            font-weight: 800;
         }
 
         textarea {
             width: 100%;
             padding: 15px;
             border-radius: 8px;
-            border: 1px solid #ccc;
+            border: 2px solid #e5e7eb;
             resize: vertical;
             font-size: 16px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            min-height: 120px;
+            transition: border-color 0.3s ease;
+            /* FIX: Ensure the textarea respects the container width */
+            box-sizing: border-box; 
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
         }
 
         button {
-            background: #2575fc;
+            background: var(--color-primary);
             color: white;
             border: none;
-            padding: 15px 25px;
-            font-size: 16px;
-            border-radius: 8px;
+            padding: 14px 28px;
+            font-size: 17px;
+            font-weight: 600;
+            border-radius: 9999px;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
         }
 
         button:hover {
-            background: #6a11cb;
+            background: var(--color-secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(139, 92, 246, 0.4);
         }
 
         p {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #666;
+            margin-top: 15px;
+            font-size: 1rem;
+            color: #6b7280;
         }
-.workflow {
-    max-width: 1200px;
-    text-align: center;
-    margin-top: 40px;
-}
+        
+        /* New Workflow Section Styles */
+        .workflow {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+            padding-bottom: 40px;
+        }
 
-.workflow h2 {
-    color: #fff;
-    margin-bottom: 20px;
-}
+        .workflow h2 {
+            color: var(--color-text-light);
+            margin-bottom: 30px;
+            font-size: 1.6rem;
+            font-weight: 800;
+        }
 
-.workflow-images {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-}
+        .workflow-images {
+            display: flex;
+            flex-wrap: wrap; /* Allows wrapping on smaller screens */
+            justify-content: center;
+            gap: 20px;
+        }
 
-.workflow figure {
-    text-align: center;
-    max-width: 280px;
-}
+        .workflow figure {
+            text-align: center;
+            background: var(--color-text-light);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            /* Adjusted max-width to ensure figures fit side-by-side reliably */
+            flex: 1 1 280px; 
+            max-width: 300px; 
+        }
 
-.workflow img {
-    width: 100%;
-    border-radius: 8px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-    transition: transform 0.3s ease;
-}
+        .workflow img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
 
-.workflow img:hover {
-    transform: scale(1.05);
-}
+        .workflow img:hover {
+            transform: scale(1.02);
+        }
 
-.workflow figcaption {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #fff;
-}
+        .workflow figcaption {
+            margin-top: 10px;
+            font-size: 1rem;
+            color: #333;
+            font-weight: 600;
+        }
 
+        /* Mobile specific adjustments for workflow images (stack vertically) */
+        @media (max-width: 768px) {
+            .workflow-images {
+                flex-direction: column;
+                align-items: center;
+            }
+            .workflow figure {
+                max-width: 90%; /* Take up most of the screen width */
+                flex-basis: auto;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Spam/Ham Classifier</h1>
+        <h1>💬 Spam/Ham Detector</h1>
         <form action="/predict" method="POST">
-            <textarea name="message" rows="6" placeholder="Type or paste your message here..." required></textarea>
-            <button type="submit">Check Message</button>
+            <textarea 
+                name="message" 
+                rows="6" 
+                placeholder="Type your message, email, or SMS text here to see if the AI classifies it as Spam..." 
+                required
+            ></textarea>
+            <button type="submit">
+                Check Message
+            </button>
         </form>
-        <p>Enter a message above to check if it's Spam or Ham.</p>
+        <p>Built using Python, Flask, NLTK, and an SVC Model (98.12% Precision).</p>
     </div>
 
+    <!-- Workflow Section -->
     <div class="workflow">
-    <h2>📊 Workflow: How It Works</h2>
-    <div class="workflow-images">
+        <h2>🔬 Model Workflow & Pipeline</h2>
+        <div class="workflow-images">
 
-        <figure>
-            <img src="static\images\Gemini_Generated_Image_2nq3oj2nq3oj2nq3.png" alt="Step 1: Data Preprocessing">
-            <figcaption> Data Preprocessing</figcaption>
-        </figure>
+            <figure>
+                <!-- FIX: Use Flask's url_for for static files -->
+                <img src="\static\images\Gemini_Generated_Image_2nq3oj2nq3oj2nq3.png" 
+                     alt="Step 1: How it work">
+                <figcaption>1. How it works</figcaption>
+            </figure>
 
-        <figure>
-            <img src="static/images/training pipeline.png" alt="Step 2: Training Pipeline">
-            <figcaption> Training Pipeline</figcaption>
-        </figure>
+             <figure>
+                <!-- FIX: Use Flask's url_for for static files -->
+                <img src="\static\images\training pipeline.png" 
+                     alt="Step 3: Vectorization and Final Prediction">
+                <figcaption>2. Training Pipeline</figcaption>
+            </figure>
 
-        <figure>
-            <img src="static/images/prediction pipeline.png" alt="Step 3: Prediction Pipeline">
-            <figcaption> Prediction Pipeline</figcaption>
-        </figure>
+            <figure>
+                <!-- FIX: Use Flask's url_for for static files -->
+                <img src='\static\images\prediction pipeline.png'
+                     alt="Step 2: Model Training with TF-IDF and SVC">
+                <figcaption>3. Prediction Pipeline</figcaption>
+            </figure>
 
+           
+
+        </div>
     </div>
-</div>
-
 </body>
 </html>
